@@ -114,6 +114,9 @@ function App() {
 
   // Keyboard shortcuts handler
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Get the current active todos to use within the callback
+    const currentActiveTodos = todos.filter(todo => !todo.completed);
+    
     // Don't trigger shortcuts when typing in input fields
     if (
       document.activeElement?.tagName === "INPUT" || 
@@ -142,23 +145,23 @@ function App() {
         break;
       case "j": // Move focus down
         e.preventDefault();
-        if (!focusedTodoId && activeTodos.length > 0) {
-          setFocusedTodoId(activeTodos[0].id);
+        if (!focusedTodoId && currentActiveTodos.length > 0) {
+          setFocusedTodoId(currentActiveTodos[0].id);
         } else if (focusedTodoId) {
-          const currentIndex = activeTodos.findIndex(todo => todo.id === focusedTodoId);
-          if (currentIndex < activeTodos.length - 1) {
-            setFocusedTodoId(activeTodos[currentIndex + 1].id);
+          const currentIndex = currentActiveTodos.findIndex(todo => todo.id === focusedTodoId);
+          if (currentIndex < currentActiveTodos.length - 1) {
+            setFocusedTodoId(currentActiveTodos[currentIndex + 1].id);
           }
         }
         break;
       case "k": // Move focus up
         e.preventDefault();
-        if (!focusedTodoId && activeTodos.length > 0) {
-          setFocusedTodoId(activeTodos[activeTodos.length - 1].id);
+        if (!focusedTodoId && currentActiveTodos.length > 0) {
+          setFocusedTodoId(currentActiveTodos[currentActiveTodos.length - 1].id);
         } else if (focusedTodoId) {
-          const currentIndex = activeTodos.findIndex(todo => todo.id === focusedTodoId);
+          const currentIndex = currentActiveTodos.findIndex(todo => todo.id === focusedTodoId);
           if (currentIndex > 0) {
-            setFocusedTodoId(activeTodos[currentIndex - 1].id);
+            setFocusedTodoId(currentActiveTodos[currentIndex - 1].id);
           }
         }
         break;
@@ -185,7 +188,11 @@ function App() {
         }
         break;
     }
-  }, [addTodo, activeTodos, focusedTodoId, toggleTodo, deleteTodo, showShortcutsHelp]);
+  }, [addTodo, todos, focusedTodoId, toggleTodo, deleteTodo, showShortcutsHelp]);
+
+  // Group todos by completion status
+  const activeTodos = todos.filter((todo) => !todo.completed);
+  const completedTodos = todos.filter((todo) => todo.completed);
 
   // Add keyboard event listener
   useEffect(() => {
@@ -194,10 +201,6 @@ function App() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
-
-  // Group todos by completion status
-  const activeTodos = todos.filter((todo) => !todo.completed);
-  const completedTodos = todos.filter((todo) => todo.completed);
 
   return (
     <div className="min-h-screen bg-background p-4 sm:p-6 md:p-8">
