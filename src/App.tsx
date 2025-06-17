@@ -120,7 +120,7 @@ function App() {
       
       <div className="max-w-md mx-auto">
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Task Master</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">TaskTastic!</h1>
           <p className="text-muted-foreground">Keep track of your tasks with ease</p>
         </header>
 
@@ -248,7 +248,7 @@ function App() {
                   No active tasks. Add one above!
                 </motion.p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {activeTodos.map((todo) => (
                     <TodoItem
                       key={todo.id}
@@ -269,7 +269,7 @@ function App() {
               <h2 className="text-lg font-medium text-foreground mb-3">
                 Completed ({completedTodos.length})
               </h2>
-              <div className="space-y-2 opacity-75">
+              <div className="space-y-1 opacity-75">
                 {completedTodos.map((todo) => (
                   <TodoItem
                     key={todo.id}
@@ -311,7 +311,7 @@ function TodoItem({
       }}
     >
       <Card 
-        className="p-4 flex items-center gap-3"
+        className="p-2 flex items-center gap-2 text-sm"
         style={{ borderLeft: `3px solid ${category.color}` }}
       >
         <Checkbox
@@ -329,9 +329,9 @@ function TodoItem({
           >
             {todo.text}
           </label>
-          <div className="flex items-center mt-1">
+          <div className="flex items-center mt-0.5">
             <span
-              className="text-xs px-2 py-0.5 rounded-full"
+              className="text-xs px-1.5 py-0 rounded-full text-[10px]"
               style={{ 
                 backgroundColor: `${category.color}20`, 
                 color: category.color,
@@ -346,9 +346,9 @@ function TodoItem({
           variant="ghost"
           size="icon"
           onClick={() => onDelete(todo.id)}
-          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+          className="h-6 w-6 text-muted-foreground hover:text-destructive"
         >
-          <Trash size={16} />
+          <Trash size={14} />
         </Button>
       </Card>
     </motion.div>

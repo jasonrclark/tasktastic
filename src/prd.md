@@ -1,4 +1,4 @@
-# Todo Application PRD
+# TaskTastic! Todo Application PRD
 
 ## Core Purpose & Success
 - **Mission Statement**: A beautiful, intuitive task management application that helps users organize their daily activities.
