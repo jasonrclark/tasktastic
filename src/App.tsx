@@ -122,37 +122,37 @@ function App() {
       <Toaster richColors position="top-center" />
       
       <div className="max-w-md mx-auto">
-        <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">TaskTastic!</h1>
-          <p className="text-muted-foreground">Keep track of your tasks with ease</p>
+        <header className="mb-5 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-1">TaskTastic!</h1>
+          <p className="text-muted-foreground text-sm">Keep track of your tasks with ease</p>
         </header>
 
-        <form onSubmit={handleSubmit} className="mb-6">
+        <form onSubmit={handleSubmit} className="mb-4">
           <div className="flex gap-2 mb-2">
             <Input
               type="text"
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               placeholder="Add a new task..."
-              className="flex-1"
+              className="flex-1 h-8 text-sm"
               id="new-todo-input"
             />
-            <Button type="submit" size="icon">
-              <Plus weight="bold" />
+            <Button type="submit" size="icon" className="h-8 w-8">
+              <Plus weight="bold" size={16} />
             </Button>
           </div>
           
           <div className="flex gap-2 items-center">
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full h-8 text-sm">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
+                  <SelectItem key={category.id} value={category.id} className="text-sm">
                     <div className="flex items-center gap-2">
                       <div 
-                        className="w-3 h-3 rounded-full" 
+                        className="w-2 h-2 rounded-full" 
                         style={{ backgroundColor: category.color }}
                       />
                       <span>{category.name}</span>
@@ -165,38 +165,39 @@ function App() {
         </form>
         
         {/* Category Management */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="text-lg font-medium text-foreground">Categories</h2>
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-base font-medium text-foreground">Categories</h2>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={() => setShowNewCategory(!showNewCategory)}
+              className="h-7 text-xs"
             >
               {showNewCategory ? "Cancel" : "Add Category"}
             </Button>
           </div>
           
           {showNewCategory && (
-            <Card className="p-4 mb-3">
-              <div className="space-y-3">
+            <Card className="p-3 mb-2">
+              <div className="space-y-2">
                 <Input
                   type="text"
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   placeholder="Category name"
-                  className="w-full"
+                  className="w-full h-8 text-sm"
                 />
                 <div className="flex gap-2">
                   <Input
                     type="color"
                     value={newCategoryColor}
                     onChange={(e) => setNewCategoryColor(e.target.value)}
-                    className="w-12 h-9 p-1 cursor-pointer"
+                    className="w-10 h-8 p-1 cursor-pointer"
                   />
                   <Button 
                     onClick={addCategory} 
-                    className="flex-1"
+                    className="flex-1 h-8 text-xs"
                     disabled={!newCategoryName.trim()}
                   >
                     Add Category
@@ -206,26 +207,26 @@ function App() {
             </Card>
           )}
           
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1.5">
             {categories.map((category) => (
               <Card 
                 key={category.id} 
-                className="p-3 flex items-center gap-2"
+                className="py-1 px-2 flex items-center gap-2"
                 style={{ borderLeft: `3px solid ${category.color}` }}
               >
                 <div 
-                  className="w-3 h-3 rounded-full flex-shrink-0" 
+                  className="w-2 h-2 rounded-full flex-shrink-0" 
                   style={{ backgroundColor: category.color }}
                 />
-                <span className="flex-1 truncate">{category.name}</span>
+                <span className="flex-1 truncate text-sm">{category.name}</span>
                 {category.id !== "default" && (
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => deleteCategory(category.id)}
-                    className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                    className="h-5 w-5 text-muted-foreground hover:text-destructive p-0"
                   >
-                    <Trash size={14} />
+                    <Trash size={12} />
                   </Button>
                 )}
               </Card>
@@ -233,10 +234,10 @@ function App() {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Active Todos */}
           <div>
-            <h2 className="text-lg font-medium text-foreground mb-3">
+            <h2 className="text-base font-medium text-foreground mb-2">
               Tasks ({activeTodos.length})
             </h2>
             
@@ -251,7 +252,7 @@ function App() {
                   No active tasks. Add one above!
                 </motion.p>
               ) : (
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {activeTodos.map((todo) => (
                     <TodoItem
                       key={todo.id}
@@ -269,10 +270,10 @@ function App() {
           {/* Completed Todos */}
           {completedTodos.length > 0 && (
             <div>
-              <h2 className="text-lg font-medium text-foreground mb-3">
+              <h2 className="text-base font-medium text-foreground mb-2">
                 Completed ({completedTodos.length})
               </h2>
-              <div className="space-y-1 opacity-75">
+              <div className="space-y-0.5 opacity-75">
                 {completedTodos.map((todo) => (
                   <TodoItem
                     key={todo.id}
@@ -314,44 +315,42 @@ function TodoItem({
       }}
     >
       <Card 
-        className="p-2 flex items-center gap-2 text-sm"
+        className="py-1 px-2 flex items-center gap-2 text-sm"
         style={{ borderLeft: `3px solid ${category.color}` }}
       >
         <Checkbox
           id={`todo-${todo.id}`}
           checked={todo.completed}
           onCheckedChange={() => onToggle(todo.id)}
-          className={todo.completed ? "data-[state=checked]:bg-accent data-[state=checked]:border-accent" : ""}
+          className={`h-3.5 w-3.5 ${todo.completed ? "data-[state=checked]:bg-accent data-[state=checked]:border-accent" : ""}`}
         />
-        <div className="flex-1">
+        <div className="flex flex-1 items-center min-w-0">
           <label
             htmlFor={`todo-${todo.id}`}
-            className={`cursor-pointer flex-1 block ${
+            className={`cursor-pointer flex-1 truncate ${
               todo.completed ? "line-through text-muted-foreground" : ""
             }`}
           >
             {todo.text}
           </label>
-          <div className="flex items-center mt-0.5">
-            <span
-              className="text-xs px-1.5 py-0 rounded-full text-[10px]"
-              style={{ 
-                backgroundColor: `${category.color}20`, 
-                color: category.color,
-                border: `1px solid ${category.color}40`
-              }}
-            >
-              {category.name}
-            </span>
-          </div>
+          <span
+            className="text-[9px] px-1 ml-1 rounded-full shrink-0"
+            style={{ 
+              backgroundColor: `${category.color}20`, 
+              color: category.color,
+              border: `1px solid ${category.color}40`
+            }}
+          >
+            {category.name}
+          </span>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => onDelete(todo.id)}
-          className="h-6 w-6 text-muted-foreground hover:text-destructive"
+          className="h-5 w-5 text-muted-foreground hover:text-destructive p-0"
         >
-          <Trash size={14} />
+          <Trash size={12} />
         </Button>
       </Card>
     </motion.div>
