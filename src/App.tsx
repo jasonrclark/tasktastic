@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useKV } from "@github/spark/hooks";
 import { v4 as uuidv4 } from "uuid";
 import { AnimatePresence, motion } from "framer-motion";
@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Plus, Trash, CheckCircle, Tag, CaretDown } from "@phosphor-icons/react";
+import { Plus, Trash, CheckCircle, Tag, CaretDown, Keyboard } from "@phosphor-icons/react";
 
 function App() {
   // Use KV store for persisting todos and categories
@@ -28,12 +28,11 @@ function App() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryColor, setNewCategoryColor] = useState("#6366f1");
   const [showNewCategory, setShowNewCategory] = useState(false);
-
-  // const prompt = spark.llmPrompt`Tell me a funny computer joke please!`;
-  // const j = await spark.llm(prompt);
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+  const [focusedTodoId, setFocusedTodoId] = useState<string | null>(null);
 
   // Add a new todo
-  const addTodo = () => {
+  const addTodo = useCallback(() => {
     if (newTodo.trim() === "") return;
 
     const todo: Todo = {
@@ -47,10 +46,10 @@ function App() {
     setTodos([...todos, todo]);
     setNewTodo("");
     toast.success("Task added");
-  };
+  }, [newTodo, selectedCategory, todos, setTodos]);
 
   // Toggle todo completion
-  const toggleTodo = (id: string) => {
+  const toggleTodo = useCallback((id: string) => {
     const updatedTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
@@ -62,13 +61,13 @@ function App() {
         icon: <CheckCircle weight="fill" className="text-green-500" />
       });
     }
-  };
+  }, [todos, setTodos]);
 
   // Delete a todo
-  const deleteTodo = (id: string) => {
+  const deleteTodo = useCallback((id: string) => {
     setTodos(todos.filter((todo) => todo.id !== id));
     toast.error("Task deleted");
-  };
+  }, [todos, setTodos]);
 
   // Add a new category
   const addCategory = () => {
@@ -113,6 +112,89 @@ function App() {
     addTodo();
   };
 
+  // Keyboard shortcuts handler
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Don't trigger shortcuts when typing in input fields
+    if (
+      document.activeElement?.tagName === "INPUT" || 
+      document.activeElement?.tagName === "TEXTAREA"
+    ) {
+      // Special case for Enter in the new todo input
+      if (e.key === "Enter" && document.activeElement.id === "new-todo-input") {
+        e.preventDefault();
+        addTodo();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case "n": // Add new task
+        e.preventDefault();
+        document.getElementById("new-todo-input")?.focus();
+        break;
+      case "c": // Toggle category panel
+        e.preventDefault();
+        setShowNewCategory(prev => !prev);
+        break;
+      case "?": // Show/hide shortcuts help
+        e.preventDefault();
+        setShowShortcutsHelp(prev => !prev);
+        break;
+      case "j": // Move focus down
+        e.preventDefault();
+        if (!focusedTodoId && activeTodos.length > 0) {
+          setFocusedTodoId(activeTodos[0].id);
+        } else if (focusedTodoId) {
+          const currentIndex = activeTodos.findIndex(todo => todo.id === focusedTodoId);
+          if (currentIndex < activeTodos.length - 1) {
+            setFocusedTodoId(activeTodos[currentIndex + 1].id);
+          }
+        }
+        break;
+      case "k": // Move focus up
+        e.preventDefault();
+        if (!focusedTodoId && activeTodos.length > 0) {
+          setFocusedTodoId(activeTodos[activeTodos.length - 1].id);
+        } else if (focusedTodoId) {
+          const currentIndex = activeTodos.findIndex(todo => todo.id === focusedTodoId);
+          if (currentIndex > 0) {
+            setFocusedTodoId(activeTodos[currentIndex - 1].id);
+          }
+        }
+        break;
+      case "x": // Toggle completion of focused task
+        if (focusedTodoId) {
+          e.preventDefault();
+          toggleTodo(focusedTodoId);
+        }
+        break;
+      case "d": // Delete focused task
+        if (focusedTodoId) {
+          e.preventDefault();
+          deleteTodo(focusedTodoId);
+          setFocusedTodoId(null);
+        }
+        break;
+      case "Escape": // Clear focus
+        if (focusedTodoId) {
+          e.preventDefault();
+          setFocusedTodoId(null);
+        } else if (showShortcutsHelp) {
+          e.preventDefault();
+          setShowShortcutsHelp(false);
+        }
+        break;
+    }
+  }, [addTodo, activeTodos, focusedTodoId, toggleTodo, deleteTodo, showShortcutsHelp]);
+
+  // Add keyboard event listener
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   // Group todos by completion status
   const activeTodos = todos.filter((todo) => !todo.completed);
   const completedTodos = todos.filter((todo) => todo.completed);
@@ -125,7 +207,66 @@ function App() {
         <header className="mb-5 text-center">
           <h1 className="text-2xl font-bold text-foreground mb-1">TaskTastic!</h1>
           <p className="text-muted-foreground text-sm">Keep track of your tasks with ease</p>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="mt-2 h-7 text-xs flex items-center gap-1"
+            onClick={() => setShowShortcutsHelp(true)}
+          >
+            <Keyboard size={14} />
+            <span>Shortcuts</span>
+          </Button>
         </header>
+
+        {showShortcutsHelp && (
+          <Card className="mb-4 p-3 bg-muted/80 shadow-md">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-sm font-medium">Keyboard Shortcuts</h3>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-6 w-6 p-0" 
+                onClick={() => setShowShortcutsHelp(false)}
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Add new task:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">n</kbd>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Toggle category panel:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">c</kbd>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Move down:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">j</kbd>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Move up:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">k</kbd>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Toggle task:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">x</kbd>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Delete task:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">d</kbd>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Clear selection:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">Esc</kbd>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Show shortcuts:</span>
+                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs">?</kbd>
+              </div>
+            </div>
+          </Card>
+        )}
 
         <form onSubmit={handleSubmit} className="mb-4">
           <div className="flex gap-2 mb-2">
@@ -260,6 +401,7 @@ function App() {
                       category={getCategoryById(todo.categoryId)}
                       onToggle={toggleTodo}
                       onDelete={deleteTodo}
+                      isFocused={focusedTodoId === todo.id}
                     />
                   ))}
                 </div>
@@ -281,6 +423,7 @@ function App() {
                     category={getCategoryById(todo.categoryId)}
                     onToggle={toggleTodo}
                     onDelete={deleteTodo}
+                    isFocused={focusedTodoId === todo.id}
                   />
                 ))}
               </div>
@@ -298,11 +441,13 @@ function TodoItem({
   category,
   onToggle,
   onDelete,
+  isFocused = false
 }: {
   todo: Todo;
   category: Category;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  isFocused?: boolean;
 }) {
   return (
     <motion.div
@@ -315,7 +460,7 @@ function TodoItem({
       }}
     >
       <Card 
-        className="py-1 px-2 flex items-center gap-2 text-sm"
+        className={`py-1 px-2 flex items-center gap-2 text-sm ${isFocused ? "ring-1 ring-accent" : ""}`}
         style={{ borderLeft: `3px solid ${category.color}` }}
       >
         <Checkbox

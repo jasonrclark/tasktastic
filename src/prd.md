@@ -49,6 +49,11 @@
    - Why: Helps users organize and visually distinguish different types of tasks
    - Success: Users can quickly identify task categories by color and filter by them
 
+7. **Keyboard Shortcuts**
+   - What: Keyboard shortcuts for common task management actions
+   - Why: Increases efficiency for power users and reduces reliance on mouse interactions
+   - Success: Users can perform all common actions without leaving the keyboard
+
 ## Design Direction
 
 ### Visual Tone & Identity
@@ -101,9 +106,10 @@
   - Cards for tasks with checkboxes and category labels
   - Buttons for actions
   - Toast notifications for confirmations
+  - Keyboard shortcuts dialog
 - **Component Customization**: Rounded corners on all elements for a friendly feel
 - **Component States**: Clear hover and active states for all interactive elements
-- **Icon Selection**: Checkmark, plus, trash, tag icons from Phosphor
+- **Icon Selection**: Checkmark, plus, trash, tag, keyboard icons from Phosphor
 - **Component Hierarchy**: Task input field given visual prominence
 - **Spacing System**: Consistent 4px-based spacing using Tailwind's scale
 - **Mobile Adaptation**: Full-width components on mobile with larger touch targets
@@ -118,16 +124,16 @@
 - **Contrast Goal**: WCAG AA compliance for all text and UI elements
 
 ## Edge Cases & Problem Scenarios
-- **Potential Obstacles**: Long task names, many completed tasks
-- **Edge Case Handling**: Truncation for very long task names, option to clear completed tasks
+- **Potential Obstacles**: Long task names, many completed tasks, keyboard shortcuts conflicts
+- **Edge Case Handling**: Truncation for very long task names, option to clear completed tasks, careful selection of keyboard shortcuts
 - **Technical Constraints**: Local storage limitations for persistent data
 
 ## Implementation Considerations
 - **Scalability Needs**: Future enhancements might include due dates, priority levels, or task filtering
-- **Testing Focus**: Validate task persistence, completion interactions, and category management
-- **Critical Questions**: How can we balance the simplicity of the interface with the additional complexity of categories?
+- **Testing Focus**: Validate task persistence, completion interactions, category management, and keyboard shortcuts
+- **Critical Questions**: How can we balance the simplicity of the interface with the additional power user features like keyboard shortcuts?
 
 ## Reflection
-- This approach uniquely balances simplicity with satisfaction, focusing on the emotional reward of completing tasks
-- We've assumed users want a straightforward task list without complex organization features
-- What would make this solution exceptional is the subtle animation and visual feedback when completing tasks, creating a moment of satisfaction
+- This approach uniquely balances simplicity with efficiency, focusing on both the emotional reward of completing tasks and the speed of keyboard shortcuts
+- We've assumed users want a straightforward task list with power user capabilities when needed
+- What would make this solution exceptional is the combination of visual satisfaction and keyboard efficiency, creating a tool that grows with users as they become more advanced
