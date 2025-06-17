@@ -29,6 +29,9 @@ function App() {
   const [newCategoryColor, setNewCategoryColor] = useState("#6366f1");
   const [showNewCategory, setShowNewCategory] = useState(false);
 
+  // const prompt = spark.llmPrompt`Tell me a funny computer joke please!`;
+  // const j = await spark.llm(prompt);
+
   // Add a new todo
   const addTodo = () => {
     if (newTodo.trim() === "") return;
