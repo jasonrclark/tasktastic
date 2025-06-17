@@ -20,12 +20,12 @@
 
 ## Essential Features
 1. **Task Creation**
-   - What: Simple input field to add new tasks
-   - Why: Enables quick capture of todo items
-   - Success: Users can add tasks in under 2 seconds
+   - What: Simple input field to add new tasks with category selection
+   - Why: Enables quick capture of todo items with organization
+   - Success: Users can add categorized tasks in under 3 seconds
 
 2. **Task Display**
-   - What: Clean, readable list of all tasks
+   - What: Clean, readable list of all tasks with category indicators
    - Why: Provides clear overview of what needs to be done
    - Success: All tasks are visible and scannable at a glance
 
@@ -43,6 +43,11 @@
    - What: Tasks remain between sessions
    - Why: Creates trust that the app will remember their items
    - Success: Tasks are preserved when user returns to the app
+
+6. **Task Categorization**
+   - What: Ability to assign categories with color labels to tasks
+   - Why: Helps users organize and visually distinguish different types of tasks
+   - Success: Users can quickly identify task categories by color and filter by them
 
 ## Design Direction
 
@@ -91,12 +96,14 @@
 ### UI Elements & Component Selection
 - **Component Usage**: 
   - Input with button for task creation
-  - Cards for tasks with checkboxes
+  - Category selector with color indicators
+  - Category management interface with color picker
+  - Cards for tasks with checkboxes and category labels
   - Buttons for actions
   - Toast notifications for confirmations
 - **Component Customization**: Rounded corners on all elements for a friendly feel
 - **Component States**: Clear hover and active states for all interactive elements
-- **Icon Selection**: Checkmark, plus, trash icons from Phosphor
+- **Icon Selection**: Checkmark, plus, trash, tag icons from Phosphor
 - **Component Hierarchy**: Task input field given visual prominence
 - **Spacing System**: Consistent 4px-based spacing using Tailwind's scale
 - **Mobile Adaptation**: Full-width components on mobile with larger touch targets
@@ -116,9 +123,9 @@
 - **Technical Constraints**: Local storage limitations for persistent data
 
 ## Implementation Considerations
-- **Scalability Needs**: Future enhancements might include categories, due dates, or priority levels
-- **Testing Focus**: Validate task persistence and completion interactions
-- **Critical Questions**: How might we balance simplicity with potential future feature additions?
+- **Scalability Needs**: Future enhancements might include due dates, priority levels, or task filtering
+- **Testing Focus**: Validate task persistence, completion interactions, and category management
+- **Critical Questions**: How can we balance the simplicity of the interface with the additional complexity of categories?
 
 ## Reflection
 - This approach uniquely balances simplicity with satisfaction, focusing on the emotional reward of completing tasks
