@@ -9,38 +9,62 @@
 
 :root {
   /* Base colors */
-  --background: oklch(0.98 0.01 240);
-  --foreground: oklch(0.25 0.01 240);
+  --background: #cccccc;
+  --foreground: #1f1f1f;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.25 0.01 240);
+  --card: #b0b0b0;
+  --card-foreground: #1f1f1f;
   
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.25 0.01 240);
+  --popover: #b0b0b0;
+  --popover-foreground: #1f1f1f;
 
   /* Action colors */
-  --primary: oklch(0.55 0.2 245);
-  --primary-foreground: oklch(1 0 0);
+  --primary: #b71c1c;
+  --primary-foreground: #ffffff;
   
-  --secondary: oklch(0.9 0.03 245);
-  --secondary-foreground: oklch(0.25 0.01 245);
+  --secondary: #556b2f;
+  --secondary-foreground: #ffffff;
   
-  --accent: oklch(0.75 0.2 85);
-  --accent-foreground: oklch(0.2 0.01 85);
+  --accent: #4682b4;
+  --accent-foreground: #ffffff;
   
-  --destructive: oklch(0.65 0.18 25);
-  --destructive-foreground: oklch(1 0 0);
+  --destructive: #ff6f00;
+  --destructive-foreground: #000000;
 
   /* Supporting UI colors */
-  --muted: oklch(0.95 0.01 240);
-  --muted-foreground: oklch(0.5 0.01 240);
+  --muted: #b8b8b8;
+  --muted-foreground: #4a4a4a;
   
-  --border: oklch(0.85 0.01 240);
-  --input: oklch(0.85 0.01 240);
-  --ring: oklch(0.55 0.2 245);
+  --border: #505050;
+  --input: #505050;
+  --ring: #b71c1c;
 
   /* Border radius */
-  --radius: 0.5rem;
+  --radius: 0px;
+  --chart-1: #b71c1c;
+  --chart-2: #556b2f;
+  --chart-3: #4682b4;
+  --chart-4: #ff6f00;
+  --chart-5: #8d6e63;
+  --sidebar: #b0b0b0;
+  --sidebar-foreground: #1f1f1f;
+  --sidebar-primary: #b71c1c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #4682b4;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #505050;
+  --sidebar-ring: #b71c1c;
+  --font-sans: "Oxanium", sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: "Source Code Pro", monospace;
+  --shadow-color: hsl(0 0% 0%);
+  --shadow-opacity: 0.4;
+  --shadow-blur: 4px;
+  --shadow-spread: 0px;
+  --shadow-offset-x: 0px;
+  --shadow-offset-y: 2px;
+  --letter-spacing: 0em;
+  --spacing: 0.25rem;
 }
 
 @theme {
